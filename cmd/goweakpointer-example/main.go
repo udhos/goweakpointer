@@ -31,28 +31,28 @@ func main() {
 		const count = 5
 
 		for i := range count {
-			fmt.Printf("main : value: %d (count down: %d)\n",
+			fmt.Printf("main   : value: %2d (count down: %2d)\n",
 				value.value.Add(1), count-i)
 			sleep()
 		}
 
-		fmt.Printf("main : finished\n")
+		fmt.Printf("main   : finished\n")
 	}
 
-	fmt.Printf("main : waiting worker\n")
+	fmt.Printf("main   : waiting worker\n")
 	wg.Wait()
-	fmt.Printf("main : waiting worker - done\n")
+	fmt.Printf("main   : waiting worker - done\n")
 }
 
 func worker(wg *sync.WaitGroup, weakValue weak.Pointer[info]) {
-	fmt.Printf("worker: want to work forever\n")
+	fmt.Printf("worker : want to work forever\n")
 	for {
 		strong := weakValue.Value()
 		if strong == nil {
-			fmt.Printf("worker: lost the pointer!\n")
+			fmt.Printf("worker : lost the pointer!\n")
 			break
 		}
-		fmt.Printf("worker: value: %d\n", strong.value.Add(1))
+		fmt.Printf("worker : value: %2d\n", strong.value.Add(1))
 		strong = nil
 
 		//
@@ -64,7 +64,7 @@ func worker(wg *sync.WaitGroup, weakValue weak.Pointer[info]) {
 
 		sleep()
 	}
-	fmt.Printf("worker: wont work forever anymore, exiting\n")
+	fmt.Printf("worker : won't work forever anymore, exiting to release resources\n")
 	wg.Done()
 }
 
